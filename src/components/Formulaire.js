@@ -7,16 +7,6 @@ import Grid from "@material-ui/core/Grid";
 import NumberFormat from "react-number-format";
 import * as constantes from "../data/constantes";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
-  margin: {
-    margin: theme.spacing(1)
-  }
-}));
-
 const ValidationTextField = withStyles({
   root: {
     "& input:valid + fieldset": {
@@ -33,6 +23,18 @@ const ValidationTextField = withStyles({
     }
   }
 })(TextField);
+
+const autoCompleteStyle = makeStyles((theme) => ({
+  inputRoot: {
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red",
+      borderWidth: 2
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red"
+    }
+  }
+}));
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -62,7 +64,7 @@ function NumberFormatCustom(props) {
 export default function Formulaire() {
   const { register, handleSubmit, watch, errors, setValue } = useForm();
   const onSubmit = (data) => console.log(data);
-  const classes = useStyles();
+  const classes = autoCompleteStyle();
 
   return (
     <div style={{ flexGrow: 1 }}>
@@ -86,14 +88,14 @@ export default function Formulaire() {
           </Grid>
           <Grid item xs={4}>
             <Autocomplete
+              classes={classes}
               id="combo-box-demo"
               options={constantes.data}
               getOptionLabel={(option) => option.label}
               fullWidth
               renderInput={(params) => (
-                <ValidationTextField
+                <TextField
                   {...params}
-                  className={classes.margin}
                   variant="outlined"
                   inputRef={register({ required: true })}
                   required
