@@ -7,34 +7,84 @@ import Grid from "@material-ui/core/Grid";
 import NumberFormat from "react-number-format";
 import * as constantes from "../data/constantes";
 
-const ValidationTextField = withStyles({
-  root: {
-    "& input:valid + fieldset": {
-      borderColor: "green",
-      borderWidth: 2
-    },
-    "& input:invalid + fieldset": {
-      borderColor: "red",
-      borderWidth: 2
-    },
-    "& input:valid:focus + fieldset": {
-      borderLeftWidth: 6,
-      padding: "4px !important" // override inline-style
-    }
-  }
-})(TextField);
+const numberFormat = (value) =>
+  new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR"
+  }).format(value);
 
-const autoCompleteStyle = makeStyles((theme) => ({
-  inputRoot: {
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "red",
-      borderWidth: 2
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "red"
-    }
-  }
-}));
+const TextFieldMontant = ({ name, register, disabled, onChangeHandler }) => {
+  const props = (disabled) => {
+    let conditionnalProperty = {};
+    !disabled &&
+      (conditionnalProperty = {
+        InputProps: { inputComponent: NumberFormatCustom }
+      });
+    return conditionnalProperty;
+  };
+
+  return (
+    <TextField
+      {...props(disabled)}
+      inputRef={register}
+      name={name}
+      label="Montant"
+      disabled={disabled}
+      variant="outlined"
+      InputLabelProps={{
+        shrink: true
+      }}
+      onChange={onChangeHandler}
+      fullWidth
+    />
+  );
+};
+
+const AutocompleteCategorie = ({ name, register }) => {
+  return (
+    <Autocomplete
+      id="autocomplete"
+      options={constantes.data}
+      getOptionLabel={(option) => option.label}
+      fullWidth
+      required
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="outlined"
+          inputRef={register({ required: true })}
+          required
+          name={name}
+          label="Catégorie"
+        />
+      )}
+    />
+  );
+};
+
+const GridOperation = ({ numero, register, disabled, onChangeHandler }) => {
+  return (
+    <Grid container direction="row" justify="center" spacing={3}>
+      <Grid item xs={3}>
+        Dépense à découper
+      </Grid>
+      <Grid item xs={4}>
+        <TextFieldMontant
+          name={"Montant_" + numero}
+          register={register}
+          disabled={disabled}
+          onChangeHandler={onChangeHandler}
+        />
+      </Grid>
+      <Grid item xs={4}>
+        <AutocompleteCategorie
+          name={"Categorie_" + numero}
+          register={register}
+        />
+      </Grid>
+    </Grid>
+  );
+};
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -54,93 +104,28 @@ function NumberFormatCustom(props) {
       thousandSeparator={" "}
       defaultValue="0"
       decimalScale="2"
-      allowEmptyFormatting
       fixedDecimalScale
-      isNumericString
+      isNumericString={false}
       suffix="€"
     />
   );
 }
 export default function Formulaire() {
   const { register, handleSubmit, watch, errors, setValue } = useForm();
-  const onSubmit = (data) => console.log(data);
-  const classes = autoCompleteStyle();
+  const onSubmit = (data) => console.log(parseFloat(data.Montant_1));
 
   return (
     <div style={{ flexGrow: 1 }}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid container direction="row" justify="center" spacing={3}>
-          <Grid item xs={4}>
-            <ValidationTextField
-              inputRef={register}
-              name="montant"
-              label="Montant"
-              disabled
-              variant="outlined"
-              InputLabelProps={{
-                shrink: true
-              }}
-              InputProps={{
-                inputComponent: NumberFormatCustom
-              }}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Autocomplete
-              classes={classes}
-              id="combo-box-demo"
-              options={constantes.data}
-              getOptionLabel={(option) => option.label}
-              fullWidth
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  inputRef={register({ required: true })}
-                  required
-                  name="categorie"
-                  label="Catégorie"
-                />
-              )}
-            />
-          </Grid>
-        </Grid>
-        <Grid container direction="row" justify="center" spacing={3}>
-          <Grid item xs={4}>
-            <ValidationTextField
-              inputRef={register}
-              variant="outlined"
-              name="montant2"
-              label="Montant"
-              InputLabelProps={{
-                shrink: true
-              }}
-              InputProps={{
-                inputComponent: NumberFormatCustom
-              }}
-              fullWidth
-              onChange={(e) => setValue("montant", 10 - e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Autocomplete
-              id="combo-box-demo2"
-              options={constantes.data}
-              getOptionLabel={(option) => option.label}
-              fullWidth
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  inputRef={register}
-                  name="categorie2"
-                  label="Catégorie"
-                />
-              )}
-            />
-          </Grid>
-        </Grid>
+        <GridOperation numero={1} register={register} disabled={true} />
+        <GridOperation
+          numero={2}
+          register={register}
+          onChangeHandler={(e) => {
+            setValue("Montant_1", numberFormat(10 - e.target.value));
+            //setValue("Montant_2", numberFormat(e.target.value));
+          }}
+        />
         <input type="submit" />
       </form>
     </div>
