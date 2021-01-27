@@ -2,13 +2,7 @@ import { createMuiTheme, makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
   root: {
-    background: theme.palette.background.paper,
-    border: "1px",
-    borderRadius: 3,
-    boxShadow: "0 3px 5px 2px primary",
-    color: "white",
-    height: 48,
-    padding: "0 30px"
+    padding: "0px 15px"
   }
 }));
 
@@ -46,5 +40,9 @@ export const theme = createMuiTheme({
       disabled: "rgba(0, 0, 0, 0.38)",
       hint: "rgba(0, 0, 0, 0.38)"
     }
+  },
+  typography: {
+    h4: { color: "#303f9f" },
+    h6: { color: "#7986cb", padding: "10px 0px 5px 0px" }
   }
 });
