@@ -1,17 +1,26 @@
 import React from "react";
+import Decoupage from "./components/Decoupage";
 import DateDepense from "./components/DateDepense";
-import Formulaire from "./components/Formulaire";
+import OperationADecouper from "./components/OperationADecouper";
 import "./styles/styles.css";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { theme } from "./styles/styles";
+import { Typography } from "@material-ui/core";
+import { theme, useStyles } from "./styles/styles";
 
 export default function App() {
+  const classes = useStyles();
+
   return (
     <ThemeProvider theme={theme}>
-      <div>
-        <h1>Hello CodeSandbox</h1>
+      <div className={classes.root}>
+        <Typography variant="h4">Découpage de dépense</Typography>
+        <br />
+        <Typography variant="h6">Dépense à découper</Typography>
         <DateDepense />
-        <Formulaire />
+        <OperationADecouper />
+        <br />
+        <Typography variant="h6">Découpage</Typography>
+        <Decoupage />
       </div>
     </ThemeProvider>
   );
