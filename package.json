@@ -23,6 +23,7 @@
     "react-number-format": "latest",
     "react-redux": "latest",
     "redux": "latest",
+    "styled-components": "5.2.1",
     "typescript": "latest"
   },
   "devDependencies": {

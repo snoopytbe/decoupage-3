@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Grid, Icon, TextField } from "@material-ui/core";
+import { Grid, Icon, Typography, Paper } from "@material-ui/core";
 import {
   TextFieldMontant,
   AutocompleteCategorie,
   GridContainerProp,
   LargeurChamps
 } from "./ComposantsOperation";
+import { OperationADecouper } from "./OperationADecouper";
+import DateDepense from "./DateDepense";
 
 export default function Decoupage() {
   const [donnees, setData] = useState([
@@ -40,39 +42,75 @@ export default function Decoupage() {
   return (
     <div style={{ flexGrow: 1 }}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {donnees.map((/*item,*/ index) => (
-          <Grid {...props()} key={index} container>
+        <Typography variant="h6">Dépense à découper</Typography>
+
+        <Controller
+          name={"Date"}
+          control={control}
+          defaultValue=""
+          render={({ onChange, value }) => <DateDepense />}
+        />
+        <br style={{ fontSize: "0.8em" }} />
+        <OperationADecouper register={register} />
+        <Typography variant="h6">Découpage</Typography>
+
+        {donnees.map((item, index) => (
+          <Grid {...props()} key={item.id} container>
             <Grid item xs={LargeurChamps}>
               <Controller
                 control={control}
                 name={"Montant_" + index}
+                defaultValue={0}
                 render={(
                   { onChange, onBlur, value, name, ref },
                   { invalid, isTouched, isDirty }
                 ) => <TextFieldMontant name={name} register={register} />}
               />
             </Grid>
+
             <Grid item xs={LargeurChamps}>
               <Controller
                 name={"Categorie_" + index}
                 control={control}
+                defaultValue=""
                 render={(
                   { onChange, onBlur, value, name, ref },
                   { invalid, isTouched, isDirty }
                 ) => <AutocompleteCategorie name={name} register={register} />}
               />
             </Grid>
-            <Grid item container xs={2}>
-              {/*               <Grid item xs={3}>
-                  <Icon color="primary">add_circle</Icon>
-              </Grid> */}
-              <Grid item xs={3}></Grid>
+            <Grid
+              item
+              container
+              direction="row"
+              justify="flex-start"
+              alignItems="center"
+              spacing={3}
+              xs={2}
+            >
+              <Grid item xs={3}>
+                <Icon
+                  color="primary"
+                  onClick={() => {
+                    append();
+                  }}
+                >
+                  add_circle
+                </Icon>
+              </Grid>
+              <Grid item xs={3}>
+                <Icon
+                  color="secondary"
+                  onClick={() => {
+                    remove(index);
+                  }}
+                >
+                  remove_circle
+                </Icon>
+              </Grid>
             </Grid>
           </Grid>
         ))}
-        <button onClick={remove(index)}>
-          <Icon color="secondary">remove_circle</Icon>
-        </button>
       </form>
     </div>
   );

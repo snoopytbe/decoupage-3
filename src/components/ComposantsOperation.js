@@ -52,6 +52,7 @@ export const TextFieldMontant = ({ name, register, disabled, onChange }) => {
       label="Montant"
       disabled={disabled}
       variant="outlined"
+      fullWidth
       InputLabelProps={{
         shrink: true
       }}
@@ -101,4 +102,4 @@ export const GridContainerProp = {
   spacing: 2
 };
 
-export const LargeurChamps = 4;
+export const LargeurChamps = 5;

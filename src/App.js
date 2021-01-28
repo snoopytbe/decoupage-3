@@ -15,11 +15,6 @@ export default function App() {
       <div className={classes.root}>
         <Typography variant="h4">Découpage de dépense</Typography>
         <br />
-        <Typography variant="h6">Dépense à découper</Typography>
-        <DateDepense />
-        <OperationADecouper />
-        <br />
-        <Typography variant="h6">Découpage</Typography>
         <Decoupage />
       </div>
     </ThemeProvider>

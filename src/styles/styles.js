@@ -44,5 +44,10 @@ export const theme = createMuiTheme({
   typography: {
     h4: { color: "#303f9f" },
     h6: { color: "#7986cb", padding: "10px 0px 5px 0px" }
+  },
+  overrides: {
+    MuiInputBase: {
+      root: { fontSize: "0.9rem" }
+    }
   }
 });

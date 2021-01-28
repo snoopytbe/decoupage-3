@@ -8,7 +8,32 @@ import {
   LargeurChamps
 } from "./ComposantsOperation";
 
-export default function Formulaire() {
+export function OperationADecouper(props) {
+  const register = props.register;
+
+  const propes = () => {
+    return GridContainerProp;
+  };
+
+  return (
+    <Grid {...propes()} container>
+      <Grid item xs={LargeurChamps}>
+        <TextFieldMontant
+          name={"Montant"}
+          register={register({ required: true })}
+        />
+      </Grid>
+      <Grid item xs={LargeurChamps}>
+        <AutocompleteCategorie
+          name={"Categorie"}
+          register={register({ required: true })}
+        />
+      </Grid>
+    </Grid>
+  );
+}
+
+export function Formulaire() {
   const {
     register,
     control,
@@ -29,10 +54,16 @@ export default function Formulaire() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid {...props()} container>
           <Grid item xs={LargeurChamps}>
-            <TextFieldMontant name={"Montant"} register={register} />
+            <TextFieldMontant
+              name={"Montant"}
+              register={register({ required: true })}
+            />
           </Grid>
           <Grid item xs={LargeurChamps}>
-            <AutocompleteCategorie name={"Categorie"} register={register} />
+            <AutocompleteCategorie
+              name={"Categorie"}
+              register={register({ required: true })}
+            />
           </Grid>
         </Grid>
       </form>
